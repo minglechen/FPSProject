@@ -1,8 +1,9 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 #include "FPSProject.h"
 #include "FPSCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Common/UdpSocketBuilder.h"
 
 // Sets default values
 AFPSCharacter::AFPSCharacter()
@@ -37,7 +38,10 @@ void AFPSCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (GEngine)
+	
+	bool suc = true;
+	StartUDPReceiver(FString(TEXT("MySocket")), FString(TEXT("127.0.0.1")), 9000, suc);
+	if (GEngine && suc)
 	{
 		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
 		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using FPSCharacter."));
@@ -49,6 +53,15 @@ void AFPSCharacter::BeginPlay()
 void AFPSCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	FString received_string;
+	bool suc = false;
+	DataRecv(received_string, suc);
+	if (suc) {
+		ScreenMsg(received_string);
+	}
+	else {
+		ScreenMsg("Random String");
+	}
 
 }
 
@@ -91,4 +104,78 @@ void AFPSCharacter::StartJump()
 void AFPSCharacter::StopJump()
 {
 	bPressedJump = false;
+}
+
+void AFPSCharacter::StartUDPReceiver(const FString& YourChosenSocketName, const FString& TheIP, const int32 ThePort, bool& success) // 接收器初始化  接收信息前  
+{
+	TSharedRef<FInternetAddr> targetAddr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	FIPv4Address Addr;
+	FIPv4Address::Parse(TheIP, Addr);
+	//Create Socket  
+	FIPv4Endpoint Endpoint(FIPv4Address::Any, ThePort); 
+	ListenSocket = FUdpSocketBuilder(*YourChosenSocketName)
+		.AsNonBlocking()
+		.AsReusable()
+		.BoundToEndpoint(Endpoint)
+		.WithReceiveBufferSize(2 * 1024 * 1024);
+	//BUFFER SIZE  
+	int32 BufferSize = 2 * 1024 * 1024;
+	ListenSocket->SetSendBufferSize(BufferSize, BufferSize);
+	ListenSocket->SetReceiveBufferSize(BufferSize, BufferSize);
+	if (!ListenSocket)
+	{
+		ScreenMsg("No socket");
+		success = false;
+	}
+	if (ListenSocket)
+	{
+		ScreenMsg("The receiver is initialized");
+		success = true;
+	}
+	//return true;  
+}
+
+void AFPSCharacter::DataRecv(FString& str, bool& success)              //接收消息处理  
+{
+	if (!ListenSocket)
+	{
+		ScreenMsg("No sender socket");
+		success = false;
+		//return success;  
+	}
+	TSharedRef<FInternetAddr> targetAddr = ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->CreateInternetAddr();
+	TArray<uint8> ReceivedData;//定义一个接收器  
+	uint32 Size;
+	if (ListenSocket->HasPendingData(Size))
+	{
+		success = true;
+		str = "";
+		uint8* Recv = new uint8[Size];
+		int32 BytesRead = 0;
+		ReceivedData.SetNumUninitialized(FMath::Min(Size, 65507u));
+		ListenSocket->RecvFrom(ReceivedData.GetData(), ReceivedData.Num(), BytesRead, *targetAddr);//创建远程接收地址  
+		char ansiiData[1024];
+		memcpy(ansiiData, ReceivedData.GetData(), BytesRead);//拷贝数据到接收器  
+		ansiiData[BytesRead] = 0;                            //判断数据结束  
+		FString debugData = ANSI_TO_TCHAR(ansiiData);         //字符串转换  
+		str = debugData;
+		// memset(ansiiData,0,1024);//清空   
+	}
+	else
+	{
+		success = false;
+	}
+	//return success;
+}
+
+AFPSCharacter::~AFPSCharacter() {
+	delete UDPReceiver;
+	UDPReceiver = nullptr;
+	//Clear all sockets!  
+	//      makes sure repeat plays in Editor dont hold on to old sockets!  
+	if (ListenSocket)
+	{
+		ListenSocket->Close();
+		ISocketSubsystem::Get(PLATFORM_SOCKETSUBSYSTEM)->DestroySocket(ListenSocket);
+	}
 }

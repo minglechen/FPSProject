@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Camera/CameraComponent.h"
+#include "Common/UdpSocketReceiver.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -15,6 +16,26 @@ class FPSPROJECT_API AFPSCharacter : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AFPSCharacter();
+	~AFPSCharacter();
+	FSocket* ListenSocket;
+	FUdpSocketReceiver* UDPReceiver = nullptr;
+	UFUNCTION(BlueprintCallable, Category = "UDP")
+	void StartUDPReceiver(const FString& YourChosenSocketName, const FString& TheIP, const int32 ThePort, bool& success);
+	UFUNCTION(BlueprintPure, Category = "UDP")
+	void DataRecv(FString& str, bool& success);
+	//ScreenMsg  
+	FORCEINLINE void ScreenMsg(const FString& Msg)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, *Msg);
+	}
+	FORCEINLINE void ScreenMsg(const FString& Msg, const float Value)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s %f"), *Msg, Value));
+	}
+	FORCEINLINE void ScreenMsg(const FString& Msg, const FString& Msg2)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("%s %s"), *Msg, *Msg2));
+	}
 
 protected:
 	// Called when the game starts or when spawned
