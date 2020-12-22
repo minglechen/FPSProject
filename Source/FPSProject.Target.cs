@@ -9,6 +9,7 @@ public class FPSProjectTarget : TargetRules
 	{
 		Type = TargetType.Game;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
+        BuildEnvironment = TargetBuildEnvironment.Shared;
 		ExtraModuleNames.AddRange( new string[] { "FPSProject" } );
 	}
 }

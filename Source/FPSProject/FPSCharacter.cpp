@@ -58,9 +58,11 @@ void AFPSCharacter::Tick(float DeltaTime)
 	DataRecv(received_string, suc);
 	if (suc) {
 		ScreenMsg(received_string);
-	}
-	else {
-		ScreenMsg("Random String");
+		TArray<FString> arr;
+		received_string.ParseIntoArray(arr, *FString(" "));
+		float angle = FCString::Atof(*(arr[4]));
+		AFPSCharacter::AddControllerPitchInput((angle-90.0) / 90.0);
+		
 	}
 
 }
