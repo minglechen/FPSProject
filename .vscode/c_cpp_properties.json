@@ -1,0 +1,12 @@
+{
+    "configurations": [
+        {
+            "name": "FPSProjectEditor Editor Linux Development (FPSProject)",
+            "intelliSenseMode": "clang-x64",
+            "compileCommands": "/home/mingle/git/FPSProject/.vscode/compileCommands_FPSProject.json",
+            "cStandard": "gnu17",
+            "cppStandard": "gnu++14"
+        }
+    ],
+    "version": 4
+}
