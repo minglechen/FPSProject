@@ -60,8 +60,10 @@ void AFPSCharacter::Tick(float DeltaTime)
 		ScreenMsg(received_string);
 		TArray<FString> arr;
 		received_string.ParseIntoArray(arr, *FString(" "));
-		float angle = FCString::Atof(*(arr[4]));
-		AFPSCharacter::AddControllerPitchInput((angle-90.0) / 90.0);
+		float angle = FCString::Atof(*(arr[2]));
+		float distance = FCString::Atof(*(arr[1])) - FCString::Atof(*(arr[5]));
+		AFPSCharacter::AddControllerPitchInput((angle-220.0) / 90.0);
+		AFPSCharacter::AddControllerYawInput((distance-250.0) / 90.0);
 		
 	}
 
