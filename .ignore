@@ -1,4 +1,10 @@
 .git
+.idea
+.kdev4
 .vscode
 Content
+DerivedDataCache
 Intermediate
+Saved
+Script
+cmake-build-debug

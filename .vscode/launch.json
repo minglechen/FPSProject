@@ -5,7 +5,7 @@
 			"name": "FPSProject (Debug)",
 			"request": "launch",
 			"preLaunchTask": "FPSProject Linux Debug Build",
-			"program": "/home/mingle/git/FPSProject/Binaries/Linux/FPSProject-Linux-Debug",
+			"program": "/home/mingle/git/FPSProject/Binaries/Linux/UE4-Linux-Debug",
 			"args": [
 			],
 			"cwd": "/home/mingle/ue4/UnrealEngine",
@@ -15,7 +15,7 @@
 			"name": "FPSProject (DebugGame)",
 			"request": "launch",
 			"preLaunchTask": "FPSProject Linux DebugGame Build",
-			"program": "/home/mingle/git/FPSProject/Binaries/Linux/FPSProject-Linux-DebugGame",
+			"program": "/home/mingle/git/FPSProject/Binaries/Linux/UE4-Linux-DebugGame",
 			"args": [
 			],
 			"cwd": "/home/mingle/ue4/UnrealEngine",
@@ -25,7 +25,7 @@
 			"name": "FPSProject (Development)",
 			"request": "launch",
 			"preLaunchTask": "FPSProject Linux Development Build",
-			"program": "/home/mingle/git/FPSProject/Binaries/Linux/FPSProject",
+			"program": "/home/mingle/git/FPSProject/Binaries/Linux/UE4",
 			"args": [
 			],
 			"cwd": "/home/mingle/ue4/UnrealEngine",
@@ -35,7 +35,7 @@
 			"name": "FPSProject (Shipping)",
 			"request": "launch",
 			"preLaunchTask": "FPSProject Linux Shipping Build",
-			"program": "/home/mingle/git/FPSProject/Binaries/Linux/FPSProject-Linux-Shipping",
+			"program": "/home/mingle/git/FPSProject/Binaries/Linux/UE4-Linux-Shipping",
 			"args": [
 			],
 			"cwd": "/home/mingle/ue4/UnrealEngine",
@@ -45,7 +45,7 @@
 			"name": "FPSProject (Test)",
 			"request": "launch",
 			"preLaunchTask": "FPSProject Linux Test Build",
-			"program": "/home/mingle/git/FPSProject/Binaries/Linux/FPSProject-Linux-Test",
+			"program": "/home/mingle/git/FPSProject/Binaries/Linux/UE4-Linux-Test",
 			"args": [
 			],
 			"cwd": "/home/mingle/ue4/UnrealEngine",
